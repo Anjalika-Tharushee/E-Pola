@@ -9,6 +9,7 @@ Open `index.html` directly in Chrome. No XAMPP, server, database, or package ins
 ## Customer shopping features
 
 - Browse featured devices and product categories.
+- Read about E-Pola and contact the team through the listed email address.
 - Search devices, filter by category and maximum price, and sort the catalog.
 - Open product details and add devices to the cart or wishlist.
 - Change cart quantities and remove saved items.

@@ -454,6 +454,105 @@ button {
   padding: 0 0 64px;
 }
 
+.about-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 74px);
+  padding: 44px clamp(22px, 5vw, 58px);
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgb(120 184 42 / 9%), rgb(255 255 255 / 2%) 55%);
+}
+
+.about-copy h2,
+.contact-section h2 {
+  margin: 0;
+  font-size: clamp(25px, 3.5vw, 37px);
+  letter-spacing: -1.4px;
+  line-height: 1.15;
+}
+
+.about-copy p,
+.contact-section > div:first-child p {
+  max-width: 570px;
+  margin: 15px 0 22px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.about-points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.about-point {
+  min-height: 130px;
+  padding: 16px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 5px;
+  background: rgb(0 0 0 / 17%);
+}
+
+.about-point > span,
+.contact-label {
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.about-point h3 {
+  margin: 13px 0 7px;
+  font-size: 13px;
+}
+
+.about-point p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.about-points .demo-notice {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.contact-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+  align-items: center;
+  gap: 30px;
+  margin: 28px 0 60px;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 6px;
+  background: rgb(255 255 255 / 3%);
+}
+
+.contact-card {
+  display: grid;
+  justify-items: start;
+  gap: 13px;
+}
+
+.contact-email {
+  font-size: clamp(17px, 2.5vw, 22px);
+  font-weight: 600;
+}
+
+.contact-email:hover {
+  color: var(--accent);
+}
+
+.footer {
+  scroll-margin-top: 24px;
+}
+
 .storage-note {
   color: var(--muted);
   font-size: 11px;
@@ -981,6 +1080,14 @@ button {
     flex-wrap: wrap;
     padding-block: 25px;
   }
+
+  .about-section {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-section {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Mobile screens */
@@ -1111,6 +1218,25 @@ button {
 
   .category-label strong {
     font-size: 14px;
+  }
+
+  .about-section {
+    gap: 24px;
+    padding: 25px 18px;
+  }
+
+  .about-points {
+    grid-template-columns: 1fr;
+  }
+
+  .about-points .demo-notice {
+    grid-column: auto;
+  }
+
+  .contact-section {
+    gap: 16px;
+    margin-bottom: 40px;
+    padding: 23px 18px;
   }
 
   .footer {
