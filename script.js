@@ -511,7 +511,7 @@ function renderProductDetail() {
     return;
   }
 
-  document.title = `${product.name} | Pola`;
+  document.title = `${product.name} | ePola`;
   const saved = getWishlist().includes(product.id);
   container.innerHTML = `
     <div class="detail-image"><img src="${product.image}" alt="${product.name}" /></div>
@@ -690,15 +690,15 @@ function renderRoute() {
   });
 
   const titles = {
-    home: "Pola | Smart Tech",
-    shop: "Shop Devices | Pola",
-    detail: "Device Details | Pola",
-    cart: "Shopping Cart | Pola",
-    checkout: "Checkout | Pola",
-    "order-confirmation": "Order Confirmation | Pola",
-    wishlist: "Wishlist | Pola",
-    login: "Sign In | Pola",
-    register: "Create Account | Pola",
+    home: "ePola | Smart Tech",
+    shop: "Shop Devices | ePola",
+    detail: "Device Details | ePola",
+    cart: "Shopping Cart | ePola",
+    checkout: "Checkout | ePola",
+    "order-confirmation": "Order Confirmation | ePola",
+    wishlist: "Wishlist | ePola",
+    login: "Sign In | ePola",
+    register: "Create Account | ePola",
   };
   document.title = titles[view];
   if (view === "shop") renderCatalogControls();
