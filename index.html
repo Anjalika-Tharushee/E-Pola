@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pola | Smart Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar container">
+        <div class="brand" aria-label="Pola home">
+          <span class="brand-mark">
+            <span class="brand-dot"></span>
+          </span>
+          <span class="brand-text">Pola</span>
+        </div>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#">Home</a>
+          <a href="#">Category</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </nav>
+
+        <button class="cart-button" aria-label="Cart">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 4h2l1.6 8.3A2 2 0 0 0 8.5 14h8.9a2 2 0 0 0 2-1.7L20.8 7H7.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="10" cy="18" r="1.4" fill="currentColor"/>
+            <circle cx="17" cy="18" r="1.4" fill="currentColor"/>
+          </svg>
+        </button>
+      </header>
+
+      <main class="container main-content">
+        <section class="hero">
+          <div class="hero-copy">
+            <h1>SMART TECH,<br />BETTER EVERYDAY.</h1>
+            <p>
+              Discover innovative gadgets and accessories<br />
+              built for performance and style.
+            </p>
+
+            <form class="search-bar" action="#" method="get">
+              <label class="sr-only" for="search">Search products</label>
+              <input id="search" type="text" placeholder="SEARCH HERE" />
+              <button type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="5.7" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16 16l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="hero-visual" aria-hidden="true">
+            <div class="hero-glow"></div>
+            <div class="phone-wrap">
+              <div class="phone-shadow"></div>
+              <div class="phone">
+                <div class="camera camera-left"></div>
+                <div class="camera camera-right"></div>
+                <div class="camera camera-bottom"></div>
+                <div class="screen-glow"></div>
+              </div>
+            </div>
+            <div class="rock rock-one"></div>
+            <div class="rock rock-two"></div>
+            <div class="rock rock-three"></div>
+          </div>
+        </section>
+
+        <section class="category-grid" aria-label="Categories">
+          <article class="category-card card-one">
+            <div class="card-image image-laptop"></div>
+            <h3>Computer &amp; Laptops</h3>
+          </article>
+
+          <article class="category-card card-two">
+            <div class="card-image image-gadgets"></div>
+            <h3>Accessories</h3>
+          </article>
+
+          <article class="category-card card-three">
+            <div class="card-image image-tv"></div>
+            <h3>TV &amp; Home Electronics</h3>
+          </article>
+        </section>
+      </main>
+
+      <footer class="footer container">
+        <div class="footer-brand">
+          <div class="brand small-brand" aria-label="Pola home">
+            <span class="brand-mark">
+              <span class="brand-dot"></span>
+            </span>
+            <span class="brand-text">Pola</span>
+          </div>
+          <p>SMART TECH,<br />BETTER EVERYDAY.</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="#">Home</a>
+          <a href="#">Category</a>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+        </div>
+
+        <div class="footer-contact">
+          <h4>Contact More Info</h4>
+          <div class="contact-icons" aria-label="Contact options">
+            <span>✉</span>
+            <span>◌</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
