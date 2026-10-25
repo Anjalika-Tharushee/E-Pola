@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Device details | Pola</title>
+    <script>
+      const destination = new URL("index.html", location.href);
+      const productId = new URLSearchParams(location.search).get("id");
+      destination.hash = productId ? `product/${encodeURIComponent(productId)}` : "shop";
+      location.replace(destination.href);
+    </script>
+  </head>
+  <body><p>Opening device details… <a href="index.html#shop">Continue to Pola</a></p></body>
+</html>

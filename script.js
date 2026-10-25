@@ -1,0 +1,591 @@
+const products = [
+  {
+    id: "pola-phone-pro",
+    name: "iPhone Pro",
+    category: "Phones",
+    price: 289900,
+    image: "assets/images/phones.png",
+    description: "A powerful smartphone with a pro camera system and all-day battery life.",
+    details: "Capture detailed photos, enjoy a vivid display, and stay productive throughout the day with this premium smartphone.",
+    specs: ["Pro camera system", "All-day battery", "High-resolution display", "Fast wireless connectivity"],
+  },
+  {
+    id: "pola-air-laptop",
+    name: "MacBook Air",
+    category: "Computers",
+    price: 459900,
+    image: "assets/images/laptop.png",
+    description: "A slim, lightweight laptop for work, study, and creativity.",
+    details: "Take your everyday work anywhere with a lightweight design, responsive performance, and a crisp display.",
+    specs: ["Lightweight aluminium design", "High-resolution display", "Fast solid-state storage", "All-day battery"],
+  },
+  {
+    id: "pola-smart-tv",
+    name: "Smart TV",
+    category: "Home electronics",
+    price: 189900,
+    image: "assets/images/television.png",
+    description: "Bring your favourite entertainment to the big screen.",
+    details: "Enjoy films, shows, and more at home with a large, detailed screen and connected entertainment features.",
+    specs: ["4K-ready display", "Smart streaming apps", "Multiple HDMI inputs", "Slim home-friendly design"],
+  },
+];
+
+const CART_KEY = "pola-cart-v1";
+const WISHLIST_KEY = "pola-wishlist-v1";
+const USERS_KEY = "pola-users-v1";
+const SESSION_KEY = "pola-session-v1";
+
+function readStoredArray(key) {
+  const value = localStorage.getItem(key);
+  if (value === null) return [];
+
+  const parsed = JSON.parse(value);
+  if (!Array.isArray(parsed)) {
+    throw new Error(`Saved data for "${key}" must be an array.`);
+  }
+  return parsed;
+}
+
+function getCart() {
+  return readStoredArray(CART_KEY).filter(
+    (item) =>
+      item &&
+      typeof item.id === "string" &&
+      Number.isInteger(item.quantity) &&
+      item.quantity > 0 &&
+      products.some((product) => product.id === item.id),
+  );
+}
+
+function getWishlist() {
+  return [
+    ...new Set(
+      readStoredArray(WISHLIST_KEY).filter(
+        (id) => typeof id === "string" && products.some((product) => product.id === id),
+      ),
+    ),
+  ];
+}
+
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function saveWishlist(wishlist) {
+  localStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
+}
+
+function getUsers() {
+  return readStoredArray(USERS_KEY);
+}
+
+function getSession() {
+  const rawSession = localStorage.getItem(SESSION_KEY);
+  if (!rawSession) return null;
+  const session = JSON.parse(rawSession);
+  return session && typeof session.email === "string" && typeof session.name === "string"
+    ? session
+    : null;
+}
+
+function formatPrice(price) {
+  return new Intl.NumberFormat("en-LK", {
+    style: "currency",
+    currency: "LKR",
+    maximumFractionDigits: 0,
+  }).format(price);
+}
+
+function getRouteParams() {
+  const hash = window.location.hash.slice(1);
+  const queryStart = hash.indexOf("?");
+  return new URLSearchParams(queryStart === -1 ? "" : hash.slice(queryStart + 1));
+}
+
+function getCurrentView() {
+  const route = window.location.hash.slice(1).split("?")[0];
+  if (route.startsWith("product/")) {
+    return { view: "detail", productId: decodeURIComponent(route.slice("product/".length)) };
+  }
+
+  const supportedViews = new Set(["home", "shop", "cart", "wishlist", "login", "register"]);
+  return { view: supportedViews.has(route) ? route : "home" };
+}
+
+function productCard(product) {
+  const inCart = getCart().some((item) => item.id === product.id);
+  const inWishlist = getWishlist().includes(product.id);
+
+  return `
+    <article class="product-card">
+      <a class="product-image" href="#product/${encodeURIComponent(product.id)}" aria-label="View ${product.name} details">
+        <img src="${product.image}" alt="${product.name}" loading="lazy" />
+        <span class="product-category">${product.category}</span>
+      </a>
+      <div class="product-info">
+        <div>
+          <h3><a href="#product/${encodeURIComponent(product.id)}">${product.name}</a></h3>
+          <p>${product.description}</p>
+        </div>
+        <strong class="product-price">${formatPrice(product.price)}</strong>
+        <div class="product-actions">
+          <button class="button button-primary" type="button" data-add-cart="${product.id}">
+            ${inCart ? "Add another" : "Add to cart"}
+          </button>
+          <button class="button button-secondary wishlist-toggle${inWishlist ? " is-saved" : ""}" type="button" data-toggle-wishlist="${product.id}" aria-label="${inWishlist ? "Remove" : "Save"} ${product.name} ${inWishlist ? "from" : "to"} wishlist" aria-pressed="${inWishlist}">
+            ${inWishlist ? "♥" : "♡"}
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function emptyState(title, message, linkText, href) {
+  return `
+    <div class="empty-state">
+      <span class="empty-icon" aria-hidden="true">♡</span>
+      <h2>${title}</h2>
+      <p>${message}</p>
+      <a class="button button-primary" href="${href}">${linkText}</a>
+    </div>
+  `;
+}
+
+function updateCounts() {
+  const cartCount = getCart().reduce((count, item) => count + item.quantity, 0);
+  const wishlistCount = getWishlist().length;
+
+  document.querySelectorAll("[data-cart-count]").forEach((element) => {
+    element.textContent = String(cartCount);
+  });
+  document.querySelectorAll("[data-wishlist-count]").forEach((element) => {
+    element.textContent = String(wishlistCount);
+  });
+}
+
+function updateAccountLinks() {
+  const session = getSession();
+  document.querySelectorAll("[data-account-link]").forEach((link) => {
+    if (session) {
+      link.textContent = `Hi, ${session.name.split(" ")[0]} · Sign out`;
+      link.href = "#sign-out";
+      link.setAttribute("data-sign-out", "");
+    } else {
+      link.textContent = "Sign in";
+      link.href = "#login";
+      link.removeAttribute("data-sign-out");
+    }
+  });
+}
+
+function renderWelcomeMessage() {
+  const message = document.querySelector("[data-welcome-message]");
+  const session = getSession();
+  if (message) {
+    message.hidden = true;
+    message.textContent = "";
+  }
+  if (!message || !session || getRouteParams().get("welcome") !== "1") {
+    return;
+  }
+
+  message.hidden = false;
+  message.textContent = `Welcome, ${session.name.split(" ")[0]} — your account is ready.`;
+}
+
+function getFilteredProducts() {
+  const params = getRouteParams();
+  const view = getCurrentView().view;
+  const query = (view === "shop" ? params.get("q") || "" : "").trim().toLowerCase();
+  const selectedCategory = view === "shop"
+    ? document.querySelector("[data-category-filter]")?.value || params.get("category") || ""
+    : "";
+  const maxPrice = view === "shop"
+    ? Number(document.querySelector("[data-price-filter]")?.value || Infinity)
+    : Infinity;
+  const sort = view === "shop"
+    ? document.querySelector("[data-sort-filter]")?.value || "featured"
+    : "featured";
+
+  const filtered = products.filter((product) => {
+    const searchable = `${product.name} ${product.category} ${product.description} ${product.details}`.toLowerCase();
+    return (
+      (!query || searchable.includes(query)) &&
+      (!selectedCategory || product.category === selectedCategory) &&
+      product.price <= maxPrice
+    );
+  });
+
+  if (sort === "price-low") filtered.sort((a, b) => a.price - b.price);
+  if (sort === "price-high") filtered.sort((a, b) => b.price - a.price);
+  if (sort === "name") filtered.sort((a, b) => a.name.localeCompare(b.name));
+  return filtered;
+}
+
+function renderProducts() {
+  const filtered = getFilteredProducts();
+  const resultsCount = document.querySelector("[data-results-count]");
+  if (resultsCount) {
+    resultsCount.textContent = `Showing ${filtered.length} of ${products.length} devices`;
+  }
+
+  document.querySelectorAll("[data-product-list]").forEach((container) => {
+    container.innerHTML = filtered.length
+      ? filtered.map((product) => productCard(product)).join("")
+      : emptyState("No devices found", "Try another search or adjust your filters.", "Clear filters", "#shop");
+  });
+}
+
+function renderCart() {
+  const list = document.querySelector("[data-cart-list]");
+  const totalContainer = document.querySelector("[data-cart-total]");
+  if (!list || !totalContainer) return;
+
+  const cart = getCart();
+  const units = cart.reduce((count, item) => count + item.quantity, 0);
+  const summary = document.querySelector("[data-cart-summary]");
+  if (summary) summary.textContent = `${units} ${units === 1 ? "item" : "items"}`;
+
+  if (!cart.length) {
+    list.innerHTML = emptyState(
+      "Your cart is empty",
+      "Find something you love and add it to your cart.",
+      "Browse products",
+      "#shop",
+    );
+    totalContainer.innerHTML = "";
+    return;
+  }
+
+  list.innerHTML = cart
+    .map((item) => {
+      const product = products.find((entry) => entry.id === item.id);
+      return `
+        <article class="cart-item">
+          <a href="#product/${encodeURIComponent(product.id)}"><img src="${product.image}" alt="${product.name}" /></a>
+          <div class="cart-item-info">
+            <span class="product-category">${product.category}</span>
+            <h2><a href="#product/${encodeURIComponent(product.id)}">${product.name}</a></h2>
+            <strong>${formatPrice(product.price)}</strong>
+          </div>
+          <div class="quantity-control" aria-label="Quantity for ${product.name}">
+            <button type="button" data-quantity="${product.id}" data-change="-1" aria-label="Decrease quantity">−</button>
+            <span>${item.quantity}</span>
+            <button type="button" data-quantity="${product.id}" data-change="1" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="remove-button" type="button" data-remove-cart="${product.id}">Remove</button>
+        </article>
+      `;
+    })
+    .join("");
+
+  const total = cart.reduce((sum, item) => {
+    const product = products.find((entry) => entry.id === item.id);
+    return sum + product.price * item.quantity;
+  }, 0);
+
+  totalContainer.innerHTML = `
+    <h2>Order summary</h2>
+    <div class="summary-line"><span>Subtotal (${units} items)</span><strong>${formatPrice(total)}</strong></div>
+    <div class="summary-line"><span>Delivery</span><span>Calculated at checkout</span></div>
+    <div class="summary-total"><span>Total</span><strong>${formatPrice(total)}</strong></div>
+    <p class="storage-note">Your cart is saved in this browser.</p>
+    <a class="button button-primary checkout-button" href="#shop">Continue shopping</a>
+  `;
+}
+
+function renderWishlist() {
+  const container = document.querySelector("[data-wishlist-list]");
+  if (!container) return;
+
+  const wishlist = getWishlist();
+  const summary = document.querySelector("[data-wishlist-summary]");
+  if (summary) {
+    summary.textContent = `${wishlist.length} ${wishlist.length === 1 ? "saved item" : "saved items"}`;
+  }
+
+  const savedProducts = wishlist
+    .map((id) => products.find((product) => product.id === id))
+    .filter(Boolean);
+  container.innerHTML = savedProducts.length
+    ? savedProducts.map((product) => productCard(product)).join("")
+    : emptyState(
+        "Your wishlist is empty",
+        "Save products here to find them again later.",
+        "Explore products",
+        "#shop",
+      );
+}
+
+function renderProductDetail() {
+  const container = document.querySelector("[data-product-detail] .detail-content");
+  if (!container) return;
+
+  const productId = getCurrentView().productId;
+  const product = products.find((entry) => entry.id === productId);
+  if (!product) {
+    container.innerHTML = emptyState(
+      "Device not found",
+      "Choose a product from the shop to see its details.",
+      "Browse devices",
+      "#shop",
+    );
+    return;
+  }
+
+  document.title = `${product.name} | Pola`;
+  const saved = getWishlist().includes(product.id);
+  container.innerHTML = `
+    <div class="detail-image"><img src="${product.image}" alt="${product.name}" /></div>
+    <section class="detail-info">
+      <span class="product-category">${product.category}</span>
+      <h1>${product.name}</h1>
+      <p class="detail-description">${product.details}</p>
+      <strong class="detail-price">${formatPrice(product.price)}</strong>
+      <div class="detail-actions">
+        <button class="button button-primary" type="button" data-add-cart="${product.id}">Add to cart</button>
+        <button class="button button-secondary wishlist-toggle${saved ? " is-saved" : ""}" type="button" data-toggle-wishlist="${product.id}" aria-pressed="${saved}">${saved ? "♥ Saved" : "♡ Save to wishlist"}</button>
+      </div>
+      <div class="spec-list">
+        <h2>Highlights</h2>
+        <ul>${product.specs.map((spec) => `<li>${spec}</li>`).join("")}</ul>
+      </div>
+      <p class="demo-notice">Product information and prices are sample data for this demo.</p>
+    </section>
+  `;
+}
+
+function renderCatalogControls() {
+  const params = getRouteParams();
+  const searchInput = document.querySelector("[data-catalog-search] input");
+  const categoryFilter = document.querySelector("[data-category-filter]");
+  const priceFilter = document.querySelector("[data-price-filter]");
+  const priceLabel = document.querySelector("[data-price-label]");
+
+  if (searchInput) searchInput.value = params.get("q") || "";
+  if (categoryFilter) categoryFilter.value = params.get("category") || "";
+  if (priceFilter && priceLabel) priceLabel.textContent = formatPrice(Number(priceFilter.value));
+}
+
+function showFormMessage(form, message, type = "error") {
+  const output = form.querySelector("[data-form-message]");
+  if (!output) return;
+  output.textContent = message;
+  output.className = `form-message is-${type}`;
+}
+
+async function hashPassword(password, salt) {
+  if (!globalThis.crypto?.subtle) {
+    throw new Error("Secure password hashing is unavailable in this browser. Open the page in a recent Chrome version.");
+  }
+  const bytes = new TextEncoder().encode(`${salt}:${password}`);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function createSalt() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+async function handleRegistration(form) {
+  const data = new FormData(form);
+  const name = String(data.get("name") || "").trim();
+  const email = String(data.get("email") || "").trim().toLowerCase();
+  const password = String(data.get("password") || "");
+  const confirmPassword = String(data.get("confirmPassword") || "");
+
+  if (name.length < 2) return showFormMessage(form, "Enter your full name.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showFormMessage(form, "Enter a valid email address.");
+  if (password.length < 8) return showFormMessage(form, "Your password must be at least 8 characters.");
+  if (password !== confirmPassword) return showFormMessage(form, "The passwords do not match.");
+
+  const users = getUsers();
+  if (users.some((user) => user.email === email)) {
+    return showFormMessage(form, "An account with this email already exists. Sign in instead.");
+  }
+
+  const salt = createSalt();
+  users.push({ name, email, salt, passwordHash: await hashPassword(password, salt) });
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ name, email }));
+  window.location.hash = "home?welcome=1";
+}
+
+async function handleLogin(form) {
+  const data = new FormData(form);
+  const email = String(data.get("email") || "").trim().toLowerCase();
+  const password = String(data.get("password") || "");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 8) {
+    return showFormMessage(form, "Enter a valid email and password (at least 8 characters).");
+  }
+
+  const user = getUsers().find((entry) => entry.email === email);
+  if (!user || (await hashPassword(password, user.salt)) !== user.passwordHash) {
+    return showFormMessage(form, "Email or password is incorrect.");
+  }
+
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ name: user.name, email: user.email }));
+  window.location.hash = "home?welcome=1";
+}
+
+function initAuthForms() {
+  const registrationForm = document.querySelector("[data-register-form]");
+  registrationForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    try {
+      await handleRegistration(registrationForm);
+    } catch (error) {
+      showFormMessage(registrationForm, error.message || "Could not create your account.");
+    }
+  });
+
+  const loginForm = document.querySelector("[data-login-form]");
+  loginForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    try {
+      await handleLogin(loginForm);
+    } catch (error) {
+      showFormMessage(loginForm, error.message || "Could not sign in.");
+    }
+  });
+}
+
+function initCatalog() {
+  renderCatalogControls();
+
+  document.querySelector("[data-home-search]")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const query = document.querySelector("[data-home-search] input").value.trim();
+    window.location.hash = query ? `shop?q=${encodeURIComponent(query)}` : "shop";
+  });
+
+  const searchForm = document.querySelector("[data-catalog-search]");
+  searchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const params = getRouteParams();
+    const query = searchForm.querySelector("input").value.trim();
+    if (query) params.set("q", query);
+    else params.delete("q");
+    const category = document.querySelector("[data-category-filter]")?.value || "";
+    if (category) params.set("category", category);
+    else params.delete("category");
+    window.location.hash = params.toString() ? `shop?${params.toString()}` : "shop";
+  });
+
+  document.querySelector("[data-category-filter]")?.addEventListener("change", (event) => {
+    const params = getRouteParams();
+    if (event.target.value) params.set("category", event.target.value);
+    else params.delete("category");
+    window.location.hash = params.toString() ? `shop?${params.toString()}` : "shop";
+  });
+  document.querySelector("[data-sort-filter]")?.addEventListener("change", renderProducts);
+  document.querySelector("[data-price-filter]")?.addEventListener("input", (event) => {
+    const priceLabel = document.querySelector("[data-price-label]");
+    if (priceLabel) priceLabel.textContent = formatPrice(Number(event.target.value));
+    renderProducts();
+  });
+  document.querySelector("[data-clear-filters]")?.addEventListener("click", () => {
+    const searchInput = document.querySelector("[data-catalog-search] input");
+    const categoryFilter = document.querySelector("[data-category-filter]");
+    const sortFilter = document.querySelector("[data-sort-filter]");
+    const priceFilter = document.querySelector("[data-price-filter]");
+    const priceLabel = document.querySelector("[data-price-label]");
+
+    if (searchInput) searchInput.value = "";
+    if (categoryFilter) categoryFilter.value = "";
+    if (sortFilter) sortFilter.value = "featured";
+    if (priceFilter) priceFilter.value = priceFilter.max;
+    if (priceLabel && priceFilter) priceLabel.textContent = formatPrice(Number(priceFilter.value));
+    window.location.hash = "shop";
+    if (getCurrentView().view === "shop" && window.location.hash === "#shop") renderProducts();
+  });
+}
+
+function renderRoute() {
+  const route = window.location.hash.slice(1).split("?")[0];
+  const { view } = getCurrentView();
+  document.querySelectorAll("[data-view]").forEach((section) => {
+    const active = section.dataset.view === view;
+    section.classList.toggle("is-active", active);
+    section.hidden = !active;
+  });
+
+  const titles = {
+    home: "Pola | Smart Tech",
+    shop: "Shop Devices | Pola",
+    detail: "Device Details | Pola",
+    cart: "Shopping Cart | Pola",
+    wishlist: "Wishlist | Pola",
+    login: "Sign In | Pola",
+    register: "Create Account | Pola",
+  };
+  document.title = titles[view];
+  if (view === "shop") renderCatalogControls();
+  updateCounts();
+  updateAccountLinks();
+  renderWelcomeMessage();
+  renderProducts();
+  renderCart();
+  renderWishlist();
+  renderProductDetail();
+
+  if (["about", "categories", "contact"].includes(route)) {
+    requestAnimationFrame(() => {
+      document.getElementById(route)?.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+}
+
+document.addEventListener("click", (event) => {
+  const signOutLink = event.target.closest("[data-sign-out]");
+  if (signOutLink) {
+    event.preventDefault();
+    localStorage.removeItem(SESSION_KEY);
+    updateAccountLinks();
+    window.location.hash = "home";
+    return;
+  }
+
+  const button = event.target.closest("button");
+  if (!button) return;
+
+  if (button.dataset.addCart) {
+    const cart = getCart();
+    const item = cart.find((entry) => entry.id === button.dataset.addCart);
+    if (item) item.quantity += 1;
+    else cart.push({ id: button.dataset.addCart, quantity: 1 });
+    saveCart(cart);
+  } else if (button.dataset.toggleWishlist) {
+    const id = button.dataset.toggleWishlist;
+    const wishlist = getWishlist();
+    saveWishlist(wishlist.includes(id) ? wishlist.filter((item) => item !== id) : [...wishlist, id]);
+  } else if (button.dataset.removeCart) {
+    saveCart(getCart().filter((item) => item.id !== button.dataset.removeCart));
+  } else if (button.dataset.quantity) {
+    const change = Number(button.dataset.change);
+    const cart = getCart()
+      .map((item) =>
+        item.id === button.dataset.quantity ? { ...item, quantity: item.quantity + change } : item,
+      )
+      .filter((item) => item.quantity > 0);
+    saveCart(cart);
+  } else {
+    return;
+  }
+
+  updateCounts();
+  updateAccountLinks();
+  renderWelcomeMessage();
+  renderProducts();
+  renderCart();
+  renderWishlist();
+  renderProductDetail();
+});
+
+initCatalog();
+initAuthForms();
+window.addEventListener("hashchange", renderRoute);
+renderRoute();
