@@ -1,6 +1,6 @@
-# E-Pola
+# ePola
 
-E-Pola is a customer shopping experience inspired by the traditional Sri Lankan marketplace "Pola".
+ePola is a customer shopping experience inspired by Sri Lankan marketplaces.
 
 ## Run locally
 
@@ -9,7 +9,7 @@ Open `index.html` directly in Chrome. No XAMPP, server, database, or package ins
 ## Customer shopping features
 
 - Browse featured devices and product categories.
-- Read about E-Pola and contact the team through the listed email address.
+- Read about ePola and contact the team through the listed email address.
 - Search devices, filter by category and maximum price, and sort the catalog.
 - Open product details and add devices to the cart or wishlist.
 - Change cart quantities and remove saved items.
