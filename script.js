@@ -35,6 +35,7 @@ const CART_KEY = "pola-cart-v1";
 const WISHLIST_KEY = "pola-wishlist-v1";
 const USERS_KEY = "pola-users-v1";
 const SESSION_KEY = "pola-session-v1";
+const ORDERS_KEY = "pola-orders-v1";
 
 function readStoredArray(key) {
   const value = localStorage.getItem(key);
@@ -66,6 +67,10 @@ function getWishlist() {
       ),
     ),
   ];
+}
+
+function getOrders() {
+  return readStoredArray(ORDERS_KEY);
 }
 
 function saveCart(cart) {
@@ -108,8 +113,14 @@ function getCurrentView() {
   if (route.startsWith("product/")) {
     return { view: "detail", productId: decodeURIComponent(route.slice("product/".length)) };
   }
+  if (route.startsWith("order-confirmation/")) {
+    return {
+      view: "order-confirmation",
+      orderId: decodeURIComponent(route.slice("order-confirmation/".length)),
+    };
+  }
 
-  const supportedViews = new Set(["home", "shop", "cart", "wishlist", "login", "register"]);
+  const supportedViews = new Set(["home", "shop", "cart", "checkout", "wishlist", "login", "register"]);
   return { view: supportedViews.has(route) ? route : "home" };
 }
 
@@ -289,11 +300,176 @@ function renderCart() {
   totalContainer.innerHTML = `
     <h2>Order summary</h2>
     <div class="summary-line"><span>Subtotal (${units} items)</span><strong>${formatPrice(total)}</strong></div>
-    <div class="summary-line"><span>Delivery</span><span>Calculated at checkout</span></div>
+    <div class="summary-line"><span>Delivery</span><span>Free</span></div>
     <div class="summary-total"><span>Total</span><strong>${formatPrice(total)}</strong></div>
     <p class="storage-note">Your cart is saved in this browser.</p>
-    <a class="button button-primary checkout-button" href="#shop">Continue shopping</a>
+    <a class="button button-primary checkout-button" href="#checkout">Proceed to checkout</a>
   `;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
+}
+
+function getCartTotal(cart) {
+  return cart.reduce((sum, item) => {
+    const product = products.find((entry) => entry.id === item.id);
+    return sum + product.price * item.quantity;
+  }, 0);
+}
+
+function renderCheckout() {
+  const container = document.querySelector("[data-checkout-content]");
+  if (!container) return;
+
+  const cart = getCart();
+  if (!cart.length) {
+    container.innerHTML = emptyState(
+      "Your cart is empty",
+      "Add a device to your cart before checking out.",
+      "Browse products",
+      "#shop",
+    );
+    return;
+  }
+
+  const session = getSession();
+  const name = session ? ` value="${escapeHtml(session.name)}"` : "";
+  const email = session ? ` value="${escapeHtml(session.email)}"` : "";
+  const items = cart.map((item) => {
+    const product = products.find((entry) => entry.id === item.id);
+    return `
+      <li class="checkout-item">
+        <img src="${product.image}" alt="" />
+        <span><strong>${product.name}</strong><small>Qty ${item.quantity}</small></span>
+        <strong>${formatPrice(product.price * item.quantity)}</strong>
+      </li>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <form class="checkout-form" data-checkout-form>
+      <section class="checkout-panel" aria-labelledby="delivery-title">
+        <h2 id="delivery-title">Delivery details</h2>
+        <div class="checkout-fields">
+          <label>Full name<input name="name" type="text" autocomplete="name" required minlength="2"${name} /></label>
+          <label>Email address<input name="email" type="email" autocomplete="email" required${email} /></label>
+          <label>Phone number<input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+94 77 123 4567" required /></label>
+          <label>City<input name="city" type="text" autocomplete="address-level2" required /></label>
+          <label class="checkout-wide">Delivery address<textarea name="address" autocomplete="street-address" rows="3" required></textarea></label>
+          <label>Postal code<input name="postalCode" type="text" autocomplete="postal-code" inputmode="numeric" required /></label>
+        </div>
+        <fieldset class="payment-choice">
+          <legend>Payment method</legend>
+          <label><input type="radio" name="payment" value="Cash on delivery" checked /> Cash on delivery</label>
+          <p>Demo checkout only. No online payment is collected.</p>
+        </fieldset>
+        <p class="form-message" data-checkout-message role="status" aria-live="polite"></p>
+        <button class="button button-primary checkout-submit" type="submit">Place demo order</button>
+        <p class="demo-notice">Order details are saved only in this browser for demonstration.</p>
+      </section>
+    </form>
+    <aside class="checkout-panel checkout-order-summary">
+      <h2>Order summary</h2>
+      <ul class="checkout-items">${items}</ul>
+      <div class="summary-line"><span>Subtotal</span><strong>${formatPrice(getCartTotal(cart))}</strong></div>
+      <div class="summary-line"><span>Delivery</span><span>Free</span></div>
+      <div class="summary-total"><span>Total</span><strong>${formatPrice(getCartTotal(cart))}</strong></div>
+    </aside>
+  `;
+}
+
+function renderOrderConfirmation() {
+  const container = document.querySelector("[data-order-confirmation]");
+  if (!container) return;
+
+  const { orderId } = getCurrentView();
+  const order = getOrders().find((entry) => entry.id === orderId);
+  if (!order) {
+    container.innerHTML = emptyState(
+      "Order not found",
+      "This order is not saved in this browser.",
+      "Return to shop",
+      "#shop",
+    );
+    return;
+  }
+
+  container.innerHTML = `
+    <section class="order-confirmation">
+      <span class="confirmation-mark" aria-hidden="true">✓</span>
+      <span class="eyebrow">Order received</span>
+      <h1>Thank you, ${escapeHtml(order.customer.name)}.</h1>
+      <p>Your demo order <strong>${escapeHtml(order.id)}</strong> has been saved in this browser.</p>
+      <p>A confirmation would be sent to <strong>${escapeHtml(order.customer.email)}</strong> in a live store.</p>
+      <div class="checkout-panel confirmation-summary">
+        <h2>Order summary</h2>
+        <ul class="checkout-items">
+          ${order.items.map((item) => `<li class="confirmation-line"><span>${escapeHtml(item.name)} × ${item.quantity}</span><strong>${formatPrice(item.price * item.quantity)}</strong></li>`).join("")}
+        </ul>
+        <div class="summary-line"><span>Delivery</span><span>Free</span></div>
+        <div class="summary-total"><span>Total</span><strong>${formatPrice(order.total)}</strong></div>
+        <p class="confirmation-address">${escapeHtml(order.customer.address)}, ${escapeHtml(order.customer.city)} ${escapeHtml(order.customer.postalCode)}</p>
+        <p class="storage-note">Payment: ${escapeHtml(order.paymentMethod)}. This demo does not process payments or send messages.</p>
+      </div>
+      <a class="button button-primary" href="#shop">Continue shopping</a>
+    </section>
+  `;
+}
+
+function handleCheckout(form) {
+  const cart = getCart();
+  if (!cart.length) {
+    showCheckoutMessage(form, "Your cart is empty. Add a device before placing an order.");
+    return false;
+  }
+
+  const data = new FormData(form);
+  const customer = {
+    name: String(data.get("name") || "").trim(),
+    email: String(data.get("email") || "").trim(),
+    phone: String(data.get("phone") || "").trim(),
+    city: String(data.get("city") || "").trim(),
+    address: String(data.get("address") || "").trim(),
+    postalCode: String(data.get("postalCode") || "").trim(),
+  };
+  if (!/^\+?[0-9 ]{7,20}$/.test(customer.phone)) {
+    showCheckoutMessage(form, "Enter a valid phone number using digits, spaces, and an optional leading +.");
+    return false;
+  }
+  const items = cart.map((item) => {
+    const product = products.find((entry) => entry.id === item.id);
+    return { id: product.id, name: product.name, price: product.price, quantity: item.quantity };
+  });
+  const order = {
+    id: `EP-${Date.now().toString(36).toUpperCase()}`,
+    createdAt: new Date().toISOString(),
+    customer,
+    paymentMethod: String(data.get("payment")),
+    items,
+    total: getCartTotal(cart),
+  };
+
+  const orders = getOrders();
+  orders.push(order);
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+  saveCart([]);
+  window.location.hash = `order-confirmation/${encodeURIComponent(order.id)}`;
+  return true;
+}
+
+function showCheckoutMessage(form, message) {
+  const output = form.querySelector("[data-checkout-message]");
+  if (output) {
+    output.textContent = message;
+    output.className = "form-message is-error";
+  }
 }
 
 function renderWishlist() {
@@ -518,6 +694,8 @@ function renderRoute() {
     shop: "Shop Devices | Pola",
     detail: "Device Details | Pola",
     cart: "Shopping Cart | Pola",
+    checkout: "Checkout | Pola",
+    "order-confirmation": "Order Confirmation | Pola",
     wishlist: "Wishlist | Pola",
     login: "Sign In | Pola",
     register: "Create Account | Pola",
@@ -529,6 +707,8 @@ function renderRoute() {
   renderWelcomeMessage();
   renderProducts();
   renderCart();
+  renderCheckout();
+  renderOrderConfirmation();
   renderWishlist();
   renderProductDetail();
 
@@ -583,6 +763,28 @@ document.addEventListener("click", (event) => {
   renderCart();
   renderWishlist();
   renderProductDetail();
+});
+
+document.addEventListener("submit", (event) => {
+  const form = event.target.closest("[data-checkout-form]");
+  if (!form) return;
+
+  event.preventDefault();
+  const data = new FormData(form);
+  const requiredFields = ["name", "email", "phone", "city", "address", "postalCode"];
+  if (requiredFields.some((field) => !String(data.get(field) || "").trim())) {
+    showCheckoutMessage(form, "Complete all delivery details before placing your order.");
+    return;
+  }
+
+  const submitButton = form.querySelector("[type='submit']");
+  submitButton.disabled = true;
+  try {
+    if (!handleCheckout(form)) submitButton.disabled = false;
+  } catch (error) {
+    submitButton.disabled = false;
+    showCheckoutMessage(form, `Could not save your order: ${error.message || "browser storage is unavailable."}`);
+  }
 });
 
 initCatalog();
