@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Dashboard | ePola</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="seller.css">
+  <script src="seller.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="brand">
+      <img src="assets/images/pola-logo.png" alt="ePola logo">
+    </a>
+    <div class="header-right">
+      <span class="seller-label">SELLER PORTAL</span>
+      <a href="index.html" class="btn btn-outline">Visit Store ↗</a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section id="authView" class="auth-card">
+      <div class="auth-logo">
+        <img src="assets/images/pola-logo.png" alt="ePola">
+      </div>
+      <span class="eyebrow">SELLER CENTRE</span>
+      <h1 id="authTitle">Welcome back</h1>
+      <p class="muted" id="authDescription">Sign in to manage your products and orders.</p>
+
+      <div class="auth-tabs">
+        <button type="button" class="tab active" id="loginTab">Login</button>
+        <button type="button" class="tab" id="registerTab">Register</button>
+      </div>
+
+      <form id="authForm">
+        <div class="field" id="nameField" hidden>
+          <label for="sellerName">Business / Seller Name</label>
+          <input id="sellerName" name="name" placeholder="Enter your seller name">
+        </div>
+        <div class="field">
+          <label for="sellerEmail">Email Address</label>
+          <input id="sellerEmail" name="email" type="email" placeholder="seller@example.com" required>
+        </div>
+        <div class="field">
+          <label for="sellerPassword">Password</label>
+          <input id="sellerPassword" name="password" type="password" minlength="6" placeholder="Minimum 6 characters" required>
+        </div>
+        <button class="btn btn-primary full" id="authSubmit" type="submit">Sign In</button>
+        <p id="authMessage" class="message" role="status"></p>
+      </form>
+      <p class="demo-note">Student demo: accounts and data are stored in this browser only.</p>
+    </section>
+
+    <section id="dashboardView" hidden>
+      <div class="welcome-row">
+        <div>
+          <span class="eyebrow">SELLER WORKSPACE</span>
+          <h1>Seller Dashboard</h1>
+          <p class="muted">Manage your catalogue, inventory and customer orders.</p>
+        </div>
+        <button id="logoutBtn" class="btn btn-outline" type="button">Log Out</button>
+      </div>
+
+      <div class="seller-heading">
+        <div class="seller-avatar" id="sellerAvatar">S</div>
+        <div>
+          <h2 id="dashboardSellerName">Seller</h2>
+          <p id="dashboardSellerEmail" class="muted"></p>
+        </div>
+        <span class="status-pill">● Active Seller</span>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-icon">▦</span>
+          <p>Total Products</p>
+          <strong id="totalProducts">0</strong>
+          <small>Products in your catalogue</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon orange">▤</span>
+          <p>Total Stock Units</p>
+          <strong id="totalStock">0</strong>
+          <small>Across your products</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon">↗</span>
+          <p>Total Orders</p>
+          <strong id="totalOrders">0</strong>
+          <small>Orders containing your products</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon orange">₨</span>
+          <p>Order Value</p>
+          <strong id="orderValue">LKR 0</strong>
+          <small>Value of your listed order items</small>
+        </article>
+      </div>
+
+      <nav class="dashboard-nav">
+        <button class="nav-tab active" data-section="productsSection" type="button">My Products</button>
+        <button class="nav-tab" data-section="ordersSection" type="button">Orders <span id="orderBadge">0</span></button>
+      </nav>
+
+      <section id="productsSection" class="panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">CATALOGUE</span>
+            <h2>Product Management</h2>
+            <p class="muted">Add new products or update your existing listings.</p>
+          </div>
+          <button class="btn btn-primary" id="addProductBtn" type="button">+ Add Product</button>
+        </div>
+
+        <form id="productForm" class="product-form" hidden>
+          <div class="form-heading">
+            <h3 id="productFormTitle">Add New Product</h3>
+            <button type="button" id="cancelProductBtn" class="icon-button" aria-label="Close form">✕</button>
+          </div>
+          <input type="hidden" id="productId">
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="productName">Product Name *</label>
+              <input id="productName" maxlength="100" required placeholder="e.g. Wireless Headphones">
+            </div>
+            <div class="field">
+              <label for="productCategory">Category *</label>
+              <select id="productCategory" required>
+                <option value="">Select category</option>
+                <option>Phones</option>
+                <option>Computers</option>
+                <option>Home electronics</option>
+                <option>Accessories</option>
+                <option>Audio</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="productPrice">Price (LKR) *</label>
+              <input id="productPrice" type="number" min="0.01" step="0.01" required placeholder="25000">
+            </div>
+            <div class="field">
+              <label for="productStock">Stock Quantity *</label>
+              <input id="productStock" type="number" min="0" step="1" required placeholder="20">
+            </div>
+            <div class="field full-width">
+              <label for="productDescription">Product Description *</label>
+              <textarea id="productDescription" maxlength="1000" rows="3" required placeholder="Describe your product..."></textarea>
+            </div>
+            <div class="field full-width">
+              <label for="productImage">Product Image</label>
+              <input id="productImage" type="file" accept="image/png,image/jpeg,image/webp">
+              <small class="muted">PNG, JPG or WebP. Images are resized for this browser demo.</small>
+              <img id="imagePreview" class="image-preview" alt="Product image preview" hidden>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="cancelProductBtnBottom" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Product</button>
+          </div>
+          <p id="productMessage" class="message" role="status"></p>
+        </form>
+
+        <div class="table-toolbar">
+          <input id="productSearch" type="search" placeholder="Search your products...">
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="">All categories</option>
+            <option>Phones</option>
+            <option>Computers</option>
+            <option>Home electronics</option>
+            <option>Accessories</option>
+            <option>Audio</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div id="productList" class="product-list"></div>
+      </section>
+
+      <section id="ordersSection" class="panel" hidden>
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">SALES</span>
+            <h2>Customer Orders</h2>
+            <p class="muted">Review orders that contain your products.</p>
+          </div>
+          <button type="button" class="btn btn-outline" id="refreshOrdersBtn">↻ Refresh</button>
+        </div>
+        <div id="ordersList" class="orders-list"></div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <img src="assets/images/pola-logo.png" alt="ePola">
+        <span>SMART TECH, BETTER EVERYDAY.</span>
+        <a href="index.html">Back to Store ↗</a>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>
