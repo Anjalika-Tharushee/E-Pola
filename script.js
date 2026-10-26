@@ -31,6 +31,40 @@ const products = [
   },
 ];
 
+// Load seller-created products into the existing product catalogue
+try {
+  const sellerProducts = JSON.parse(
+    localStorage.getItem("epola-seller-products-v1") || "[]"
+  );
+
+  if (Array.isArray(sellerProducts)) {
+    sellerProducts.forEach((product) => {
+      if (
+        product &&
+        typeof product.id === "string" &&
+        typeof product.name === "string" &&
+        Number(product.price) > 0 &&
+        !products.some((existing) => existing.id === product.id)
+      ) {
+        products.push({
+          id: product.id,
+          name: product.name,
+          category: product.category || "Other",
+          price: Number(product.price),
+          image: product.image || "assets/images/phones.png",
+          description: product.description || "",
+          details: product.description || "",
+          specs: [],
+          stock: Number(product.stock || 0),
+          sellerEmail: product.sellerEmail || ""
+        });
+      }
+    });
+  }
+} catch (error) {
+  console.error("Could not load seller products:", error);
+}
+
 const CART_KEY = "pola-cart-v1";
 const WISHLIST_KEY = "pola-wishlist-v1";
 const USERS_KEY = "pola-users-v1";
