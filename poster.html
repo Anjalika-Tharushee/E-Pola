@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ePola HCI component 3 E Poster and demonstration guide." />
+    <title>ePola | HCI E Poster</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="poster.css" />
+    <script src="poster.js" defer></script>
+  </head>
+  <body>
+    <main class="poster">
+      <header class="poster-header">
+        <div>
+          <p class="kicker">Human Computer Interaction · Component 3</p>
+          <h1>ePola<span> / </span>Smart tech, better everyday.</h1>
+          <p class="lead">A focused e-commerce experience for discovering, comparing and purchasing everyday technology.</p>
+        </div>
+        <div class="header-meta">
+          <strong>E POSTER</strong>
+          <span>Application demonstration</span>
+          <a href="index.html">Open the live application ↗</a>
+        </div>
+      </header>
+
+      <section class="summary-grid" aria-label="Project summary">
+        <article class="summary-card accent-card">
+          <span class="number">01</span>
+          <h2>The challenge</h2>
+          <p>Design a clear and trustworthy shopping journey for customers looking for phones, computers and home electronics.</p>
+        </article>
+        <article class="summary-card">
+          <span class="number">02</span>
+          <h2>Our response</h2>
+          <p>A responsive browser-based store with search, category browsing, product details, cart, wishlist and demo checkout.</p>
+        </article>
+        <article class="summary-card">
+          <span class="number">03</span>
+          <h2>Design goal</h2>
+          <p>Reduce decision effort through strong hierarchy, useful product information and predictable interactions.</p>
+        </article>
+      </section>
+
+      <section class="poster-section member-section">
+        <div class="section-title">
+          <p class="kicker">My contribution · Member 3</p>
+          <h2>Checkout, orders and administration</h2>
+        </div>
+        <div class="member-grid">
+          <article><span>01</span><h3>Shopping cart</h3><p>Customers can review selected products, change quantities and remove items before purchasing.</p></article>
+          <article><span>02</span><h3>Checkout flow</h3><p>The checkout form collects delivery details and validates the information before the demo order is placed.</p></article>
+          <article><span>03</span><h3>Order confirmation</h3><p>A confirmation screen gives clear feedback after checkout and records the demo order in browser storage.</p></article>
+          <article><span>04</span><h3>Administration</h3><p>Seller and product-management features support maintaining product information and stock for the store.</p></article>
+        </div>
+        <div class="member-script">
+          <strong>My demonstration script:</strong>
+          “I will demonstrate how a customer reviews the cart, updates quantities, enters checkout details and receives an order confirmation. I will also explain how orders and product information are stored in localStorage for this browser-based prototype.”
+        </div>
+      </section>
+
+      <section class="poster-section">
+        <div class="section-title">
+          <p class="kicker">What the customer can do</p>
+          <h2>One simple journey from discovery to checkout</h2>
+        </div>
+        <div class="journey">
+          <article><span>01</span><h3>Discover</h3><p>Use featured products, categories or search to find a device.</p></article>
+          <article><span>02</span><h3>Compare</h3><p>Open details, read descriptions and check specifications and price.</p></article>
+          <article><span>03</span><h3>Save</h3><p>Keep a product in the wishlist or add it to the shopping cart.</p></article>
+          <article><span>04</span><h3>Complete</h3><p>Review quantities, enter delivery details and place a demo order.</p></article>
+        </div>
+      </section>
+
+      <section class="poster-section split-section">
+        <div>
+          <div class="section-title">
+            <p class="kicker">Universal design in practice</p>
+            <h2>Designed for clarity and control</h2>
+          </div>
+          <ul class="design-list">
+            <li><strong>Perceivable:</strong> high-contrast text, meaningful labels, descriptive image alternative text and visible focus states.</li>
+            <li><strong>Operable:</strong> keyboard-friendly links and forms, large touch targets, simple navigation and no time-limited actions.</li>
+            <li><strong>Understandable:</strong> consistent buttons, familiar shopping language, inline validation and clear feedback after actions.</li>
+            <li><strong>Robust:</strong> semantic HTML, labelled form controls, live status messages and responsive layouts for different screens.</li>
+          </ul>
+        </div>
+        <aside class="evidence-card">
+          <p class="kicker">Evidence in the interface</p>
+          <div class="evidence-row"><span>Search</span><strong>Find products quickly</strong></div>
+          <div class="evidence-row"><span>Filters</span><strong>Category, price and sorting</strong></div>
+          <div class="evidence-row"><span>Feedback</span><strong>Cart counts and status messages</strong></div>
+          <div class="evidence-row"><span>Persistence</span><strong>Browser localStorage</strong></div>
+        </aside>
+      </section>
+
+      <section class="poster-section interactive-section">
+        <div class="section-title">
+          <p class="kicker">Choose a view</p>
+          <h2>Supporting evidence for the demonstration</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="E Poster sections">
+          <button class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="tab-demo" data-tab="tab-demo">Demo script</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="tab-requirements" data-tab="tab-requirements">Customer requirements</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="tab-evaluation" data-tab="tab-evaluation">Evaluation takeaways</button>
+        </div>
+        <div class="tab-panel is-visible" id="tab-demo" role="tabpanel">
+          <ol class="demo-list">
+            <li><strong>0:00–0:45 · Introduce:</strong> explain the customer problem and the three product categories.</li>
+            <li><strong>0:45–2:00 · Find:</strong> search for a product, filter by category and demonstrate price sorting.</li>
+            <li><strong>2:00–3:00 · Decide:</strong> open product details, show specifications, then save one item to the wishlist.</li>
+            <li><strong>3:00–4:15 · Purchase:</strong> add an item to the cart, change quantity, review the total and complete the mock checkout.</li>
+            <li><strong>4:15–5:00 · Reflect:</strong> show localStorage persistence and explain the accessibility and usability decisions.</li>
+          </ol>
+        </div>
+        <div class="tab-panel" id="tab-requirements" role="tabpanel" hidden>
+          <div class="requirements-grid">
+            <p><strong>Browse</strong><span>Featured products and category cards make entry points visible.</span></p>
+            <p><strong>Search</strong><span>Search, filter and sort controls support different strategies.</span></p>
+            <p><strong>Basket</strong><span>Customers can add, remove and change product quantities.</span></p>
+            <p><strong>Checkout</strong><span>A clear mock checkout confirms the order without real payment.</span></p>
+          </div>
+        </div>
+        <div class="tab-panel" id="tab-evaluation" role="tabpanel" hidden>
+          <div class="takeaways">
+            <p><span>✓</span> Keep the primary action visible at every important step.</p>
+            <p><span>✓</span> Use plain language and immediate feedback to reduce uncertainty.</p>
+            <p><span>✓</span> Keep user choices available through cart, wishlist and browser storage.</p>
+            <p><span>→</span> Future improvement: test with more users and refine content from observed behaviour.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="poster-footer">
+        <div><strong>ePola</strong><span>Student HCI project · HTML · CSS · JavaScript</span></div>
+        <button class="print-button" type="button" data-print>Print / save as PDF</button>
+        <a href="index.html">Return to application ↗</a>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -17,3 +17,7 @@ Open `index.html` directly in Chrome. No XAMPP, server, database, or package ins
 - Create a demo customer account and sign in.
 
 Cart, wishlist, demo orders, and demo account data are stored in the browser's `localStorage`. Clearing browser data removes them. Product descriptions and prices are sample data. Checkout does not process payments or send order notifications. Registration and sign-in are client-side demonstrations only; do not use real passwords or personal information.
+
+## HCI Component 3
+
+Open [poster.html](poster.html) to view the interactive E Poster for the application demonstration. It includes the customer journey, universal-design decisions, customer requirements, evaluation takeaways, and a timed five-minute demo script. Use **Print / save as PDF** to create a submission copy.
