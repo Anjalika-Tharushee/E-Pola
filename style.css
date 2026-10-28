@@ -2952,3 +2952,122 @@ body {
   border-color: #63c49b;
   color: #78d5a8;
 }
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: calc(100% - clamp(20px, 3vw, 40px));
+  margin-inline: auto;
+  min-height: clamp(420px, 45vw, 560px);
+  position: relative;
+  isolation: isolate;
+  padding: 32px clamp(24px, 5vw, 64px);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgb(237 245 241 / 96%) 0%,
+    rgb(237 245 241 / 88%) 34%,
+    rgb(237 245 241 / 48%) 56%,
+    rgb(237 245 241 / 5%) 100%
+  );
+}
+
+.hero-copy {
+  width: min(100%, 620px);
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  padding: 28px 0;
+}
+
+.hero .hero-visual {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.hero .hero-image {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero .hero-glow {
+  display: none;
+}
+
+:root[data-theme="dark"] .hero::before {
+  background: linear-gradient(
+    90deg,
+    rgb(20 33 29 / 97%) 0%,
+    rgb(20 33 29 / 88%) 34%,
+    rgb(20 33 29 / 48%) 56%,
+    rgb(20 33 29 / 8%) 100%
+  );
+}
+
+@media (max-width: 540px) {
+  .hero {
+    width: calc(100% - 16px);
+    min-height: clamp(400px, 115vw, 480px);
+    padding: 22px;
+  }
+
+  .hero::before {
+    background: linear-gradient(
+      90deg,
+      rgb(237 245 241 / 96%) 0%,
+      rgb(237 245 241 / 85%) 58%,
+      rgb(237 245 241 / 35%) 100%
+    );
+  }
+
+  :root[data-theme="dark"] .hero::before {
+    background: linear-gradient(
+      90deg,
+      rgb(20 33 29 / 97%) 0%,
+      rgb(20 33 29 / 88%) 58%,
+      rgb(20 33 29 / 40%) 100%
+    );
+  }
+}
+
+.product-image {
+  height: 185px;
+}
+
+.product-info {
+  gap: 9px;
+  padding: 14px;
+}
+
+.product-info p {
+  min-height: 28px;
+  margin-top: 5px;
+}
+
+.product-actions .button {
+  min-height: 36px;
+}
+
+.category-card {
+  min-height: 190px;
+}
