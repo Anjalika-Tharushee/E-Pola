@@ -1,14 +1,109 @@
 const products = [
+
+
+  // ==================== PHONES (10) ====================
   {
     id: "pola-phone-pro",
     name: "iPhone Pro",
     category: "Phones",
     price: 289900,
-    image: "assets/images/phones.png",
+    image: "assets/images/Apple17.jpg",
     description: "A powerful smartphone with a pro camera system and all-day battery life.",
-    details: "Capture detailed photos, enjoy a vivid display, and stay productive throughout the day with this premium smartphone.",
-    specs: ["Pro camera system", "All-day battery", "High-resolution display", "Fast wireless connectivity"],
+    details: "Capture detailed photos and enjoy a vivid display.",
+    specs: ["Pro camera system", "All-day battery", "High-resolution display"],
   },
+  {
+    id: "pola-samsung-galaxy-s",
+    name: "Samsung Galaxy S",
+    category: "Phones",
+    price: 245000,
+    image: "assets/images/Samsung25.jpg",
+    description: "A premium Samsung smartphone.",
+    details: "Enjoy powerful performance and an immersive display.",
+    specs: ["AMOLED display", "Advanced camera", "Fast charging"],
+  },
+  {
+    id: "pola-google-pixel",
+    name: "Google Pixel",
+    category: "Phones",
+    price: 198000,
+    image: "assets/images/Google-Pixel.jpg",
+    description: "A smart phone with excellent photography features.",
+    details: "Capture beautiful photos and enjoy a clean smartphone experience.",
+    specs: ["Smart camera", "OLED display", "Fast performance"],
+  },
+  {
+    id: "pola-redmi-note",
+    name: "Redmi Note",
+    category: "Phones",
+    price: 72500,
+    image: "assets/images/redmi.png",
+    description: "An affordable smartphone for everyday use.",
+    details: "Enjoy entertainment, communication and everyday applications.",
+    specs: ["Large display", "Long battery life", "Multiple cameras"],
+  },
+  {
+    id: "pola-samsung-galaxy-a",
+    name: "Samsung Galaxy A",
+    category: "Phones",
+    price: 95000,
+    image: "assets/images/Samsung_Galaxy.jpg",
+    description: "A versatile smartphone for everyday activities.",
+    details: "Stay connected with reliable performance and a stylish design.",
+    specs: ["Large display", "Quality camera", "Fast connectivity"],
+  },
+  {
+    id: "pola-iphone-se",
+    name: "iPhone SE",
+    category: "Phones",
+    price: 135000,
+    image: "assets/images/Apple_new.jpg",
+    description: "A compact Apple smartphone.",
+    details: "Enjoy a familiar Apple experience in a compact design.",
+    specs: ["Compact design", "Quality camera", "iOS experience"],
+  },
+  {
+    id: "pola-oneplus-phone",
+    name: "OnePlus Phone",
+    category: "Phones",
+    price: 165000,
+    image: "assets/images/oneplus.jpg",
+    description: "A fast smartphone with a modern design.",
+    details: "Enjoy responsive performance and smooth everyday use.",
+    specs: ["Fast processor", "High refresh rate display", "Fast charging"],
+  },
+  {
+    id: "pola-oppo-phone",
+    name: "OPPO Phone",
+    category: "Phones",
+    price: 89900,
+    image: "assets/images/oppo.png",
+    description: "A stylish smartphone for everyday use.",
+    details: "Take photos, browse and stay connected throughout the day.",
+    specs: ["Stylish design", "Multiple cameras", "Long battery life"],
+  },
+  {
+    id: "pola-vivo-phone",
+    name: "Vivo Phone",
+    category: "Phones",
+    price: 84500,
+    image: "assets/images/vivo.jpg",
+    description: "A modern smartphone with camera features.",
+    details: "Enjoy entertainment and everyday communication.",
+    specs: ["Camera features", "Large display", "Fast connectivity"],
+  },
+  {
+    id: "pola-infinix-phone",
+    name: "Infinix Phone",
+    category: "Phones",
+    price: 59900,
+    image: "assets/images/infinix.jpg",
+    description: "A budget-friendly smartphone.",
+    details: "A practical choice for browsing, messaging and entertainment.",
+    specs: ["Large display", "Everyday performance", "Long battery life"],
+  },
+
+  // ==================== COMPUTERS (10) ====================
   {
     id: "pola-air-laptop",
     name: "MacBook Air",
@@ -16,9 +111,101 @@ const products = [
     price: 459900,
     image: "assets/images/laptop.png",
     description: "A slim, lightweight laptop for work, study, and creativity.",
-    details: "Take your everyday work anywhere with a lightweight design, responsive performance, and a crisp display.",
-    specs: ["Lightweight aluminium design", "High-resolution display", "Fast solid-state storage", "All-day battery"],
+    details: "Take your everyday work anywhere with a lightweight design.",
+    specs: ["Lightweight design", "High-resolution display", "Fast storage"],
   },
+  {
+    id: "pola-dell-inspiron",
+    name: "Dell Inspiron",
+    category: "Computers",
+    price: 235000,
+    image: "assets/images/dell.jpg",
+    description: "A versatile laptop for work and education.",
+    details: "Handle daily tasks, online learning and office applications.",
+    specs: ["Full HD display", "SSD storage", "Webcam"],
+  },
+  {
+    id: "pola-hp-pavilion",
+    name: "HP Pavilion",
+    category: "Computers",
+    price: 249000,
+    image: "assets/images/hp.jpg",
+    description: "A stylish laptop for productivity and entertainment.",
+    details: "Work, study and enjoy multimedia on a modern laptop.",
+    specs: ["Full HD display", "Modern processor", "SSD storage"],
+  },
+  {
+    id: "pola-lenovo-ideapad",
+    name: "Lenovo IdeaPad",
+    category: "Computers",
+    price: 199000,
+    image: "assets/images/leno.jpeg",
+    description: "A practical laptop for everyday computing.",
+    details: "Suitable for assignments, browsing and office work.",
+    specs: ["Portable design", "SSD storage", "Integrated webcam"],
+  },
+  {
+    id: "pola-asus-vivobook",
+    name: "ASUS VivoBook",
+    category: "Computers",
+    price: 219000,
+    image: "assets/images/ASuse.jpeg",
+    description: "A lightweight laptop for everyday productivity.",
+    details: "Enjoy a portable design for work and study.",
+    specs: ["Full HD display", "Portable design", "Fast storage"],
+  },
+  {
+    id: "pola-acer-aspire",
+    name: "Acer Aspire",
+    category: "Computers",
+    price: 185000,
+    image: "assets/images/Acer Aspire.jpeg",
+    description: "An affordable laptop for home and office use.",
+    details: "Complete everyday computing tasks with ease.",
+    specs: ["Full HD display", "SSD storage", "Wi-Fi connectivity"],
+  },
+  {
+    id: "pola-lenovo-thinkpad",
+    name: "Lenovo ThinkPad",
+    category: "Computers",
+    price: 285000,
+    image: "assets/images/leno1.jpeg",
+    description: "A business laptop designed for productivity.",
+    details: "Work efficiently with a professional laptop design.",
+    specs: ["Business design", "Comfortable keyboard", "SSD storage"],
+  },
+  {
+    id: "pola-hp-victus",
+    name: "HP Victus Gaming Laptop",
+    category: "Computers",
+    price: 365000,
+    image: "assets/images/hpgamming.jpeg",
+    description: "A gaming laptop for immersive entertainment.",
+    details: "Enjoy PC games and demanding applications.",
+    specs: ["Gaming graphics", "High refresh rate options", "Powerful processor"],
+  },
+  {
+    id: "pola-asus-rog",
+    name: "ASUS ROG Gaming Laptop",
+    category: "Computers",
+    price: 525000,
+    image: "assets/images/asusrog.jpeg",
+    description: "A performance-focused gaming laptop.",
+    details: "Designed for gaming and intensive computing tasks.",
+    specs: ["Gaming graphics", "Advanced cooling", "High-performance hardware"],
+  },
+  {
+    id: "pola-macbook-pro",
+    name: "MacBook Pro",
+    category: "Computers",
+    price: 649900,
+    image: "assets/images/mac.jpeg",
+    description: "A premium laptop for professional workflows.",
+    details: "Work on creative projects and demanding applications.",
+    specs: ["High-resolution display", "Powerful processor", "Fast storage"],
+  },
+
+  // ==================== HOME ELECTRONICS (10) ====================
   {
     id: "pola-smart-tv",
     name: "Smart TV",
@@ -26,10 +213,135 @@ const products = [
     price: 189900,
     image: "assets/images/television.png",
     description: "Bring your favourite entertainment to the big screen.",
-    details: "Enjoy films, shows, and more at home with a large, detailed screen and connected entertainment features.",
-    specs: ["4K-ready display", "Smart streaming apps", "Multiple HDMI inputs", "Slim home-friendly design"],
+    details: "Enjoy films, shows and connected entertainment features.",
+    specs: ["4K-ready display", "Streaming apps", "HDMI inputs"],
+  },
+  {
+    id: "pola-refrigerator",
+    name: "Refrigerator",
+    category: "Home electronics",
+    price: 245000,
+    image: "assets/images/ref.jpg",
+    description: "A modern refrigerator for your kitchen.",
+    details: "Keep food and beverages fresh at home.",
+    specs: ["Adjustable shelves", "Storage compartments", "Energy-saving features"],
+  },
+  {
+    id: "pola-washing-machine",
+    name: "Washing Machine",
+    category: "Home electronics",
+    price: 165000,
+    image: "assets/images/wm.jpg",
+    description: "A convenient washing machine for home laundry.",
+    details: "Manage laundry with practical washing programs.",
+    specs: ["Multiple wash programs", "Convenient controls", "Large drum"],
+  },
+  {
+    id: "pola-microwave",
+    name: "Microwave Oven",
+    category: "Home electronics",
+    price: 42500,
+    image: "assets/images/mo.jpg",
+    description: "A microwave oven for quick meal preparation.",
+    details: "Heat meals and prepare everyday dishes conveniently.",
+    specs: ["Multiple power levels", "Timer", "Easy-clean interior"],
+  },
+  {
+    id: "pola-air-conditioner",
+    name: "Air Conditioner",
+    category: "Home electronics",
+    price: 185000,
+    image: "assets/images/cool.jpg",
+    description: "An air conditioner for comfortable indoor spaces.",
+    details: "Cool your room and enjoy adjustable temperature settings.",
+    specs: ["Cooling modes", "Remote control", "Adjustable temperature"],
+  },
+  {
+    id: "pola-robot-vacuum",
+    name: "Robot Vacuum Cleaner",
+    category: "Home electronics",
+    price: 79900,
+    image: "assets/images/Vacuum.png",
+    description: "A robot vacuum for convenient floor cleaning.",
+    details: "Help maintain clean floors with automated cleaning.",
+    specs: ["Automatic cleaning", "Rechargeable battery", "Compact design"],
+  },
+  {
+    id: "pola-rice-cooker",
+    name: "Rice Cooker",
+    category: "Home electronics",
+    price: 18500,
+    image: "assets/images/Rice Cooker.png",
+    description: "A convenient rice cooker for everyday meals.",
+    details: "Cook rice easily with simple controls.",
+    specs: ["Cook and keep-warm modes", "Easy controls", "Removable pot"],
+  },
+  {
+    id: "pola-air-purifier",
+    name: "Air Purifier",
+    category: "Home electronics",
+    price: 54900,
+    image: "assets/images/air.png",
+    description: "An air purifier for indoor spaces.",
+    details: "Help filter airborne particles using a compatible filter.",
+    specs: ["Air filtration", "Multiple fan settings", "Filter replacement"],
+  },
+  {
+    id: "pola-bluetooth-speaker",
+    name: "Bluetooth Speaker",
+    category: "Home electronics",
+    price: 24900,
+    image: "assets/images/jbl.png",
+    description: "A portable speaker for music and entertainment.",
+    details: "Play music wirelessly from compatible devices.",
+    specs: ["Bluetooth connectivity", "Rechargeable battery", "Portable design"],
+  },
+  {
+    id: "pola-soundbar",
+    name: "Soundbar",
+    category: "Home electronics",
+    price: 69900,
+    image: "assets/images/sound.jpeg",
+    description: "A soundbar for enhanced home entertainment audio.",
+    details: "Improve your TV audio with a compact speaker system.",
+    specs: ["Enhanced TV audio", "Multiple connection options", "Compact design"],
   },
 ];
+
+
+// Load seller-created products into the existing product catalogue
+try {
+  const sellerProducts = JSON.parse(
+    localStorage.getItem("epola-seller-products-v1") || "[]"
+  );
+
+  if (Array.isArray(sellerProducts)) {
+    sellerProducts.forEach((product) => {
+      if (
+        product &&
+        typeof product.id === "string" &&
+        typeof product.name === "string" &&
+        Number(product.price) > 0 &&
+        !products.some((existing) => existing.id === product.id)
+      ) {
+        products.push({
+          id: product.id,
+          name: product.name,
+          category: product.category || "Other",
+          price: Number(product.price),
+          image: product.image || "assets/images/phones.png",
+          description: product.description || "",
+          details: product.description || "",
+          specs: [],
+          stock: Number(product.stock || 0),
+          sellerEmail: product.sellerEmail || ""
+        });
+      }
+    });
+  }
+} catch (error) {
+  console.error("Could not load seller products:", error);
+}
 
 const CART_KEY = "pola-cart-v1";
 const WISHLIST_KEY = "pola-wishlist-v1";
