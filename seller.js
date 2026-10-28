@@ -6,6 +6,7 @@ const SELLER_SESSION_KEY = "epola-seller-session-v1";
 const SELLER_PRODUCTS_KEY = "epola-seller-products-v1";
 const ORDER_STATUS_KEY = "epola-order-status-v1";
 const ORDERS_KEY = "pola-orders-v1";
+const THEME_KEY = "epola-theme-v1";
 
 const $ = (id) => document.getElementById(id);
 
@@ -53,6 +54,25 @@ function showMessage(id, message, error = false) {
   const element = $(id);
   element.textContent = message;
   element.classList.toggle("error", error);
+}
+
+function setTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  const toggle = $("themeToggle");
+  const label = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+  toggle.setAttribute("aria-label", label);
+  toggle.setAttribute("title", label);
+  toggle.setAttribute("aria-pressed", String(theme === "dark"));
+}
+
+function initThemeToggle() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  setTheme(savedTheme === "dark" ? "dark" : "light");
+  $("themeToggle").addEventListener("click", () => {
+    const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_KEY, theme);
+    setTheme(theme);
+  });
 }
 
 function getProducts() {
@@ -508,4 +528,5 @@ document.querySelectorAll(".nav-tab").forEach((button) => {
 
 $("refreshOrdersBtn").addEventListener("click", renderDashboard);
 
+initThemeToggle();
 restoreSession();
