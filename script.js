@@ -348,6 +348,7 @@ const WISHLIST_KEY = "pola-wishlist-v1";
 const USERS_KEY = "pola-users-v1";
 const SESSION_KEY = "pola-session-v1";
 const ORDERS_KEY = "pola-orders-v1";
+const THEME_KEY = "epola-theme-v1";
 
 function readStoredArray(key) {
   const value = localStorage.getItem(key);
@@ -1031,6 +1032,26 @@ function renderRoute() {
   }
 }
 
+function setTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  const toggle = document.querySelector("[data-theme-toggle]");
+  const label = theme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+  toggle?.setAttribute("aria-label", label);
+  toggle?.setAttribute("title", label);
+  toggle?.setAttribute("aria-pressed", String(theme === "dark"));
+}
+
+function initThemeToggle() {
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  setTheme(savedTheme === "dark" ? "dark" : "light");
+
+  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem(THEME_KEY, theme);
+    setTheme(theme);
+  });
+}
+
 document.addEventListener("click", (event) => {
   const signOutLink = event.target.closest("[data-sign-out]");
   if (signOutLink) {
@@ -1099,6 +1120,7 @@ document.addEventListener("submit", (event) => {
   }
 });
 
+initThemeToggle();
 initCatalog();
 initAuthForms();
 window.addEventListener("hashchange", renderRoute);
